@@ -1,29 +1,17 @@
 const express = require('express');
 const app = express();
 const articleRouter = require('./routes/articles');
-
+const Article = require('./models/article');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/blog', {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+});
 app.set('view engine', 'ejs');
-app.get('/', (req, res) => {
-	const articles = [
-		{
-			title: 'title 1',
-			description: 'description of title 1',
-			markdown: 'description of title `1`',
-			createdAt: new Date(),
-		},
-		{
-			title: 'title 2',
-			description: 'description of title 2',
-			markdown: 'description of title `2`',
-			createdAt: new Date(),
-		},
-		{
-			title: 'title 3',
-			description: 'description of title 3',
-			markdown: 'description of title `3`',
-			createdAt: new Date(),
-		},
-	];
+app.use(express.urlencoded({ extended: false }));
+
+app.get('/', async (req, res) => {
+	const articles = await Article.find().sort({ createdAt: 'desc' });
 	res.render('articles/index', { articles });
 });
 
