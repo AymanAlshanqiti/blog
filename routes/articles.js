@@ -21,4 +21,9 @@ router.post('/', async (req, res) => {
 	}
 });
 
+router.get('/:id', async (req, res) => {
+	const article = await Article.findById(req.params.id, { __v: 0 });
+	res.render('articles/show', { article });
+});
+
 module.exports = router;
