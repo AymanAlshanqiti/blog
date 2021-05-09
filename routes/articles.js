@@ -21,6 +21,24 @@ router.post('/', async (req, res) => {
 	}
 });
 
+router.get('/edit/:id', async (req, res) => {
+	const article = await Article.findById(req.params.id);
+	res.render('articles/edit', { article });
+});
+
+router.put('/:id', async (req, res) => {
+	const article = await Article.findById(req.params.id);
+	article.title = req.body.title;
+	article.description = req.body.description;
+	article.markdown = req.body.markdown;
+	try {
+		await article.save();
+		res.redirect(`/articles/${article.slug}`);
+	} catch (error) {
+		res.redirect('/articles/edit', { article });
+	}
+});
+
 router.delete('/:id', async (req, res) => {
 	await Article.findByIdAndDelete(req.params.id);
 	res.redirect('/');

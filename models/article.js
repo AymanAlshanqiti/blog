@@ -26,7 +26,7 @@ const articleSchema = mongoose.Schema({
 articleSchema.pre('validate', function (next) {
 	if (this.title) {
 		this.slug = slugify(this.title, {
-			// replacement: '-',
+			replacement: '-',
 			lower: true,
 			strict: true,
 		});
